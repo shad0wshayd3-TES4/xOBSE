@@ -71,6 +71,16 @@ UInt32 Actor::GetBaseActorValue(UInt32 value)
 	return ThisStdCall(s_Actor_GetBaseActorValue, this, value);
 }
 
+void Actor::DrainFatigue(float a_amount)
+{
+	ThisStdCall(0x005E07D0, this, a_amount);
+}
+
+void Actor::UpdateCastPowers(float a_elaspsedTime)
+{
+	ThisStdCall(0x005E7A60, this, a_elaspsedTime);
+}
+
 EquippedItemsList Actor::GetEquippedItems()
 {
 	EquippedItemsList itemList;
@@ -134,6 +144,16 @@ void PlayerCharacter::TogglePOV(bool bFirstPerson)
 void PlayerCharacter::SetBirthSign(BirthSign* birthSign)
 {
 	ThisStdCall(0x0066A400, this, birthSign);
+}
+
+void PlayerCharacter::GameModActorValue(UInt32 a_which, float a_value, Actor* a_attacker)
+{
+	ThisStdCall(0x0065E530, this, a_which, a_value, a_attacker);
+}
+
+void PlayerCharacter::GameModActorValue(UInt32 a_which, SInt32 a_value, Actor* a_attacker)
+{
+	ThisStdCall(0x0065E490, this, a_which, a_value, a_attacker);
 }
 
 float GetGameSettingFloat(const char* settingName)

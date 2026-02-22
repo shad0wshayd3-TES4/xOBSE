@@ -807,6 +807,8 @@ public:
 
 	// unk1 looks like quantity, usu. 1; ignored for ammo (equips entire stack)
 	// itemExtraList is NULL as the container changes entry is not resolved before the call
+	void				DrainFatigue(float a_amount);
+
 	void				EquipItem(TESForm * objType, UInt32 unk1, ExtraDataList* itemExtraList, UInt32 unk3, bool lockEquip);
 	void				UnequipItem(TESForm* objType, UInt32 unk1, ExtraDataList* itemExtraList, UInt32 unk3, bool lockUnequip, UInt32 unk5);
 	void				UnequipItemSilent(TESForm* objType, UInt32 unk1, ExtraDataList* itemExtraList, UInt32 unk3, bool lockUnequip, UInt32 unk5);
@@ -817,6 +819,7 @@ public:
 	bool				CanCastGreaterPower(SpellItem* power);
 	void				SetCanUseGreaterPower(SpellItem* power, bool bAllowUse, float timer = -1);
 	void				UnequipAllItems();
+	void				UpdateCastPowers(float a_elaspedTime);
 
 	// 8
 	struct PowerListData {
@@ -1058,6 +1061,9 @@ public:
 	UInt32		unk7FC;							// 7FC
 	//  float unk800;  //Defined into ida pro definition. Probably saw this used somewhere, structure is probably 804 size not 800 (but it's the leaf of the hyerarchy so it doesn't matter)
 	// 800
+
+	void GameModActorValue(UInt32 a_which, float a_value, Actor* a_attacker);
+	void GameModActorValue(UInt32 a_which, SInt32 a_value, Actor* a_attacker);
 
 	bool	SetActiveSpell(MagicItem * item);
 	UInt8	GetAttributeBonus(UInt32 whichAttribute) {
@@ -1337,10 +1343,13 @@ public:
 	{
 		// not sure if this data is generated for collisions with immobile objects too, or if struct is unique to ArrowProjectile (probably not)
 		float			unk00[9];	// 00 presumably a matrix or set of 3 3-dimensional vectors
-		TESObjectREFR	* refr;		// 24 what it hit
-		NiNode			* ninode;	// 28 seen "Bip01 Spine" for Creature
-		float			unk2C[9];	// 2C again
+		UInt32			pad24;		// 24
+		TESObjectREFR	* refr;		// 28 what it hit
+		NiNode			* ninode;	// 2C seen "Bip01 Spine" for Creature
+		float			unk2C[9];	// 30 again
 	};
+	static_assert(offsetof(CollisionData, refr) == 0x28);
+	static_assert(sizeof(CollisionData) == 0x54);
 
 	CollisionData	* unk05C;		//05C
 	UInt32			unk060;			//060

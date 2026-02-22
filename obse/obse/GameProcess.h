@@ -975,7 +975,7 @@ UnkBC seems also related to knockout
 	virtual void	Unk_116(void) = 0;
 	virtual void	Unk_117(void) = 0;
 	virtual void	Unk_118(void) = 0;
-	virtual void	Unk_119(void) = 0;
+	virtual float	GetMagicModifier(UInt32 a_avCode) = 0;
 	virtual void	Unk_11A(void) = 0;
 	virtual void	Unk_11B(void) = 0;
 	virtual void	Unk_11C(void) = 0;
