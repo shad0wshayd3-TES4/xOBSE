@@ -20,7 +20,7 @@ namespace Prefs
 		double fBaseHealthStrengthMult{ 0.6666 };
 		double fBaseHealthEnduranceMult{ 1.3333 };
 		double fBaseHealthEnduranceLevelMult{ 0.1 };
-		
+
 		bool bBaseMagickaFormula{ true };
 		double fBaseMagickaIntelligenceMult{ 2.0 };
 
@@ -35,7 +35,7 @@ namespace Prefs
 
 		bool bMagickaRegenFormula{ true };
 		double fMagickaRegenWillpowerQuadMult{ 0.0003 };
-		double fMagickaRegenWillpowerLinearMult{ 0.01 };
+		double fMagickaRegenWillpowerLinearMult{ 0.015 };
 		double fMagickaRegenOutOfCombatMult{ 2.0 };
 
 		bool bFatigueRegenFormula{ true };
@@ -358,11 +358,14 @@ namespace Hooks
 
 		static void Install()
 		{
-			WriteRelCall(HookAddr0, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // HighProcess::ProcessAim
-			WriteRelCall(HookAddr1, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // HighProcess::ProcessCast
-			WriteRelCall(HookAddr2, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // PlayerCharacter::PlayerSleep
-			WriteRelCall(HookAddr3, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // PlayerCharacter::FastTravel
-			WriteRelCall(HookAddr4, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // ProcessLists::UpdateHighList
+			// disabled hooks crash -- probably needs custom asm but I'll wait for someone to notice...
+			// these are all npc/wait related
+
+			// WriteRelCall(HookAddr0, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // HighProcess::ProcessAim
+			// WriteRelCall(HookAddr1, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // HighProcess::ProcessCast
+			// WriteRelCall(HookAddr2, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // PlayerCharacter::PlayerSleep
+			// WriteRelCall(HookAddr3, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // PlayerCharacter::FastTravel
+			// WriteRelCall(HookAddr4, reinterpret_cast<std::uintptr_t>(RestoreMagicka)); // ProcessLists::UpdateHighList
 
 			static constexpr std::uint32_t addr{ 0x005FAD2A };
 			static constexpr std::uint32_t retn{ 0x005FAE3F };
@@ -450,7 +453,7 @@ namespace Hooks
 			WriteRelCall(HookAddr3, reinterpret_cast<std::uint32_t>(DrainFatigue)); // Actor::UpdateTimedSystems			-- Drawn Bow
 			WriteRelCall(HookAddr4, reinterpret_cast<std::uint32_t>(DrainFatigue)); // MagicCaster::CastSpell?				-- Cast
 			WriteRelCall(HookAddr5, reinterpret_cast<std::uint32_t>(DrainFatigue)); // Actor::PickAnimations				-- Drawn Bow?
-			
+
 			if (!Prefs::Settings.bFatigueRegenDelayMovement)
 				return;
 			WriteRelCall(HookAddr2, reinterpret_cast<std::uint32_t>(DrainFatigue)); // Actor::UpdateTimedSystems			-- Run
@@ -499,7 +502,7 @@ extern "C" bool OBSEPlugin_Query(const OBSEInterface* obse, PluginInfo* info)
 
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "BakaRemasteredLeveling";
-	info->version = 1;
+	info->version = 2;
 
 	if (obse->isEditor)
 	{
